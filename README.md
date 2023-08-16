@@ -23,8 +23,16 @@ TODO: add picture from cbc example
 ```
 
 ## Installation
+As TransientAnalyzer itself does not require additional contraints, the installation is mainly nanoBench itself:
 ```
-TODO: write down installation
+sudo apt install python3 python3-plotly
+git submodule --init update
+cd nanoBench
+make kernel
+```
+Afterward, the nanoBench kernel module needs to be loaded:
+```
+sudo insmod nanoBench/kernel/nb.ko
 ```
 
 ## Usage
