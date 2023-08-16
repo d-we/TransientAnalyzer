@@ -12,7 +12,7 @@ from plotly.offline import plot
 from shutil import copyfile
 
 import userNanoBench
-import kernelNanoBench
+from nanoBench import kernelNanoBench
 from common import *
 
 # arch = 'BDW'
@@ -24,7 +24,7 @@ MEASUREMENTS_PER_TESTRUN_NORMAL = 500
 MEASUREMENTS_PER_TESTRUN_CBC = 1  # dbg
 # configfile = "../../configs/cfg_Broadwell_all.txt"
 #configfile = "../../configs/cfg_Broadwell_custom.txt"
-configfile = "../../configs/cfg_Skylake_common.txt"
+configfile = ".nanoBench/configs/cfg_Skylake_common.txt"
 
 VERBOSE = True
 
@@ -165,7 +165,6 @@ def load_nanobench_configfile(fname, usermode=False):
 
 
 def generate_transient_code(maincode, initcode, execute_architecturally):
-    # TODO: test whether added divps event makes normalmode more noisy
     transient_code_template = '''
     cpuid; # serialize
     
@@ -222,7 +221,7 @@ gdbg:
 retgadget:
     # initcode:
     %s
-    # mark hot section with divider event (TODO: test that this approach works reliably and doesn't break the transient windows)
+    # mark hot section with divider event
     divps xmm4, xmm5
     
     lea r12, [rip+g1];
@@ -248,7 +247,7 @@ retgadget:
     .space 8192, 0x0;
 end:
     nop;
-    # mark hot section with divider event (TODO: test that this approach works reliably and doesn't break the transient windows)
+    # mark hot section with divider event
     mfence;
     divps xmm4, xmm5;
     '''
@@ -267,13 +266,13 @@ end:
     xor r11, r11;
     xor r12, r12;
     
-    # mark hot section with divider event (TODO: test that this approach works reliably and doesn't break the transient windows)
+    # mark hot section with divider event 
     divps xmm4, xmm5;
     
     # testcode:
     %s
     
-    # mark hot section with divider event (TODO: test that this approach works reliably and doesn't break the transient windows)
+    # mark hot section with divider event
     mfence;
     divps xmm4, xmm5;
     nop;
