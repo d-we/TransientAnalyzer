@@ -1,0 +1,3 @@
+[submodule "nanoBench"]
+	path = nanoBench
+	url = https://github.com/andreas-abel/nanoBench
